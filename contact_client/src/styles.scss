@@ -1,0 +1,37 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body {
+    background-color: #333 !important;
+  }
+  
+
+app-contact {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-top: 2.5rem;
+}
+app-form-contact {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+}
+
+.info {
+    background-color: #3F51B5;
+}
+
+.danger {
+    background-color: #D32F2F;
+}
+
+.success {
+    background-color: #009688;
+    margin: 0 auto !important;
+    display: flex !important;
+}

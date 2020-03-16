@@ -1,0 +1,42 @@
+<h1 mat-dialog-title>Add Contact</h1>
+<p *ngIf="validation == false" class="required">{{msg}}</p>
+<div mat-dialog-content>
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input matInput [(ngModel)]="data.name">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input matInput [(ngModel)]="data.email">
+  </mat-form-field>
+  <div *ngFor="let phone of data.phones; let indexOfelement=index;" >
+      <div [ngClass]="{'container-phones': phone_focus === indexOfelement}">
+    <div  [ngClass]="{'pack': data.phones.length > 1}">
+  
+    <mat-form-field  appearance="outline" class="phone">
+        <mat-label>Phone</mat-label>
+        <input  (focus)="showInput(indexOfelement)"  [(ngModel)]="phone.number" matInput placeholder="phone"> 
+        <mat-icon matSuffix>phone</mat-icon>
+        <mat-hint>{{phone.type}}</mat-hint>   
+    </mat-form-field>
+  <span *ngIf="data.phones.length > 1"  class="remove-icon"><a (click)="removePhoneFromList(indexOfelement)" ><mat-icon  matSuffix>delete</mat-icon></a></span>
+</div>
+
+  <mat-form-field *ngIf="phone_focus === indexOfelement"  appearance="outline" class="type">
+    <mat-label>type</mat-label>
+    <input (focus)="showInput(indexOfelement)"   type="text" [(ngModel)]="phone.type" matInput placeholder="type">
+    <mat-icon matSuffix>home</mat-icon>
+    <mat-hint>{{phone.number}}</mat-hint>
+  </mat-form-field>
+  
+</div>
+<div class="add-container" *ngIf="indexOfelement +1 === data.phones.length">
+    <a (click) = "addPhones()" class="add-a"><mat-icon aria-hidden="false" >add</mat-icon></a>
+</div>
+</div>
+
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancelar</button>
+  <button mat-button (click)="save(data)" cdkFocusInitial>Guardar</button>
+</div>

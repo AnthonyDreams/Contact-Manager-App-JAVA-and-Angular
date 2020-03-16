@@ -1,0 +1,148 @@
+  <mat-form-field id="filter">
+    <mat-label>Name, email, phones...</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Search">
+  </mat-form-field>
+  <!-- <ng2-smart-table [settings]="settings" [source]="contacts$"  (createConfirm)="save($event)"></ng2-smart-table> -->
+  
+
+  <div class="example-container mat-elevation-z8">
+    <div class="example-loading-shade"
+         *ngIf="isLoadingResults || isRateLimitReached">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+      <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        GitHub's API rate limit has been reached. It will be reset in one minute.
+      </div>
+    </div>
+  
+    <div class="example-table-container">
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Actions </th>
+      <td mat-cell *matCellDef="let element"> 
+        <ng-container *ngIf="id == element.id; else elseTemplate">
+          <a  class="icon" (click)="hideEdit()"><mat-icon aria-hidden="false" >remove</mat-icon></a>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <a  class="icon" (click)="showEdit(element.id)"><mat-icon aria-hidden="false" >edit</mat-icon></a>
+          
+        </ng-template>
+        
+        
+        <a class="icon"><mat-icon aria-hidden="false" (click)="removeContact(element.id)">delete</mat-icon></a>
+
+
+
+        <a class="icon check" *ngIf="id == element.id" (click)="editContact()"><mat-icon aria-hidden="false" >check</mat-icon></a>
+
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Name </th>
+      <td mat-cell *matCellDef="let element"> 
+        
+        <input *ngIf="id == element.id; else elseTemplate" [(ngModel)] = "contact.name" type="text" >
+        <ng-template #elseTemplate>
+        <span >
+          {{element.name}} 
+        </span>
+      </ng-template>
+          
+      
+      </td>
+    </ng-container>
+   
+    
+
+    
+  
+    <!-- EMail Column -->
+    <ng-container matColumnDef="email">
+      <th mat-header-cell *matHeaderCellDef> Email </th>
+      <td mat-cell *matCellDef="let element"> 
+        <input *ngIf="id == element.id; else elseTemplate" type="text" [(ngModel)] = "contact.email" >
+        <ng-template #elseTemplate>
+        <span >
+          {{element.email}} 
+        </span>
+      </ng-template>
+        
+      </td>
+    </ng-container>
+  
+    <!-- Phones Column -->
+    <ng-container matColumnDef="phones">
+      <th mat-header-cell *matHeaderCellDef> Phones </th>
+      <td mat-cell *matCellDef="let element; let i = index"> <a matTooltip="Gestionar numeros"
+        matTooltipPosition="below"
+        aria-label="Button that displays a tooltip in various positions">
+        
+        <mat-accordion>
+          <mat-expansion-panel  [expanded]="isOpen(element.id)"  (opened)="setOpen(element.id)" (closed)="setClose(element.id)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span *ngIf="!element.first">---</span>
+                <u>{{element.first}}</u> 
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <form (ngSubmit)="savePhones(element.id)">
+            <div class="phone_action_button">
+              <button *ngIf="showSave(element.id) > -2 && allPhonesvalidation(element.id)" class="phone-save" type="submit" mat-raised-button>Save</button>
+              <a (click)="addPhone(element.id)" class="phone-add" mat-button>Add</a>
+            </div>
+              <div class="contact-phones" *ngFor="let phoneb of phonesToSave_[phonesToSave(element.id)] ? phonesToSave_[phonesToSave(element.id)].phone : []; let index=index;trackBy:trackByIndex;" >
+                <div>
+                    <mat-form-field>
+                      <input name="number{{index}}" [(ngModel)]="phoneb.number"  matInput>
+                      <mat-icon matSuffix>phone</mat-icon>
+                    </mat-form-field>
+                
+                    <mat-form-field>
+                      <input name="type{{index}}" [(ngModel)]="phoneb.type"  matInput type="text" min="1">
+                      <mat-icon matSuffix>home</mat-icon>
+                    </mat-form-field>
+
+                    <a class="delete_phone" (click)="removePhoneTable('save', index, element.id)" ><mat-icon matSuffix>delete</mat-icon></a>
+                </div>
+                
+              </div>
+              <div class="contact-phones" *ngFor="let phone of element.phones; let index=index">
+                  <mat-form-field>
+                    <mat-label>Phone </mat-label>
+                    <input name="number_{{index}}" [(ngModel)]="phone.number" (focus)="setPhoneInArray(element.id, phone)" matInput>
+                    <mat-icon matSuffix>phone</mat-icon>
+                  </mat-form-field>
+              
+                  <mat-form-field>
+                    <mat-label>Type</mat-label>
+                    <input name="type_{{index}}" [(ngModel)]="phone.type" (focus)="setPhoneInArray(element.id, phone)" matInput type="text" min="1">
+                    <mat-icon matSuffix>home</mat-icon>
+                  </mat-form-field>
+                  <ng-container *ngIf="getIndexOfPhone(element.id, phone.id) > -1; else elseRemove">
+                    <a  class="delete_phone" (click)="removePhoneTable('edit', index, element.id)" ><mat-icon matSuffix>delete</mat-icon></a>
+                    
+                  </ng-container>
+                  <ng-template #elseRemove>
+                    <a  class="delete_phone" (click)="removePhoneTable('edit', phone.id, element.id)" ><mat-icon matSuffix>delete</mat-icon></a>
+                    
+                  </ng-template>
+                  
+                 
+                
+          </div>
+          </form>
+          </mat-expansion-panel>
+        </mat-accordion>
+      
+      
+      
+      </a> </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+    </div>
+  <mat-paginator [pageSizeOptions]="[ 10, 20]" showFirstLastButtons></mat-paginator>

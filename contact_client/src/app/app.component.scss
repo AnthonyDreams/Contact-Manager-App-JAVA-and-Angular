@@ -1,0 +1,66 @@
+.float{
+	position:fixed;
+	width:60px;
+	height:60px;
+	bottom:40px;
+	right:40px;
+	background-color:maroon;
+	color:#FFF;
+    border-radius:50px;
+    cursor: pointer;
+	text-align:center;
+    box-shadow: 2px 2px 3px #999;
+    z-index: 9999;
+}
+
+.my-float{
+	margin-top:22px;
+}
+
+.float mat-icon{
+    margin-top: 15px;
+    margin-left: -5px;
+    font-size: 30px;
+}
+
+.required {
+    color: #ff2828 !important;
+}
+
+.phone {
+    width: 90%;
+    margin-top: 15px;
+}
+
+
+.type {
+    width: 90%;
+    margin-top: 0px;
+}
+
+.add-a {
+    cursor: pointer;
+}
+
+.pack {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.pack .remove-icon{
+    margin-left: 5px;
+    cursor: pointer;
+} 
+
+.container-phones {
+  
+    padding: 0px 7px;
+
+    width: 100%;
+    box-shadow: -2px -2px #535353, 1px 2px #242424;
+
+}
+.add-container{
+    margin-top: 10px;
+}
