@@ -23,7 +23,7 @@
     "@angular/platform-browser-dynamic": "~9.0.3",
     "@angular/router": "~9.0.3",
     "express": "^4.17.1",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "ng2-completer": "^3.0.3",
     "ng2-smart-table": "^1.5.0",
     "path": "^0.12.7",
